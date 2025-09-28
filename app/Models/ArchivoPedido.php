@@ -14,6 +14,7 @@ class ArchivoPedido extends Model
         'pedido_id',
         'nombre_original',
         'ruta',
+        'impreso',
     ];
 
     /**

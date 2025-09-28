@@ -71,6 +71,7 @@ class InsumoController extends Controller
         'nombre' => 'required|string|max:255|unique:insumos,nombre,' . $insumo->id,
         'descripcion' => 'nullable|string',
         'costo' => 'required|numeric|min:0',
+        'costo_por_unidad' => 'required|numeric|min:0',
         'stock_actual' => 'required|integer|min:0',
         'stock_minimo' => 'required|integer|min:0',
     ]);

@@ -1,56 +1,77 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Añadir Nuevo Insumo</title>
-</head>
-<body>
-    <h1>Añadir Nuevo Insumo al Inventario</h1>
+@extends('layouts.app')
 
-    <form action="{{ route('insumos.store') }}" method="POST">
-        @csrf
+@section('content')
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Nuevo Insumo</h1>
+        <p class="mt-2 text-sm text-gray-600">Registra un nuevo insumo en el inventario</p>
+    </div>
 
-        <div>
-            <label for="nombre">Nombre del Insumo:</label>
-            <input type="text" id="nombre" name="nombre" value="{{ old('nombre') }}" required>
-            @error('nombre')
-                <div style="color: red;">{{ $message }}</div>
-            @enderror
-        </div>
-        <br>
-        <div>
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion">{{ old('descripcion') }}</textarea>
-        </div>
-        <br>
-        <div>
-            <label for="costo">Costo (por unidad):</label>
-            <input type="number" id="costo" name="costo" step="0.01" min="0" value="{{ old('costo') }}" required>
-            @error('costo')
-                <div style="color: red;">{{ $message }}</div>
-            @enderror
-        </div>
-        <br>
-        <div>
-            <label for="stock_actual">Stock Actual:</label>
-            <input type="number" id="stock_actual" name="stock_actual" min="0" value="{{ old('stock_actual') }}" required>
-            @error('stock_actual')
-                <div style="color: red;">{{ $message }}</div>
-            @enderror
-        </div>
-        <br>
-        <div>
-            <label for="stock_minimo">Stock Mínimo:</label>
-            <input type="number" id="stock_minimo" name="stock_minimo" min="0" value="{{ old('stock_minimo') }}" required>
-            @error('stock_minimo')
-                <div style="color: red;">{{ $message }}</div>
-            @enderror
-        </div>
-        <br>
-        <button type="submit">Guardar Insumo</button>
-    </form>
-    <hr>
-    <a href="{{ route('insumos.index') }}">Cancelar y Volver</a>
-</body>
-</html>
+    <!-- Form -->
+    <div class="bg-white shadow-sm rounded-lg">
+        <form action="{{ route('insumos.store') }}" method="POST" class="p-6 space-y-6">
+            @csrf
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+                    <input type="text" id="nombre" name="nombre" value="{{ old('nombre') }}" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500">
+                    @error('nombre')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="stock_actual" class="block text-sm font-medium text-gray-700 mb-1">Stock Actual *</label>
+                    <input type="number" id="stock_actual" name="stock_actual" value="{{ old('stock_actual', 0) }}" min="0" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500">
+                    @error('stock_actual')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="stock_minimo" class="block text-sm font-medium text-gray-700 mb-1">Stock Mínimo *</label>
+                    <input type="number" id="stock_minimo" name="stock_minimo" value="{{ old('stock_minimo', 0) }}" min="0" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500">
+                    @error('stock_minimo')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="precio" class="block text-sm font-medium text-gray-700 mb-1">Precio Unitario</label>
+                    <input type="number" id="precio" name="precio" value="{{ old('precio') }}" step="0.01" min="0"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500">
+                    @error('precio')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div>
+                <label for="descripcion" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="3"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500">{{ old('descripcion') }}</textarea>
+                @error('descripcion')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+                <a href="{{ route('insumos.index') }}" 
+                   class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    Guardar Insumo
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
