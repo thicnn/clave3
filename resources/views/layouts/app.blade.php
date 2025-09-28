@@ -30,7 +30,20 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('pedidos.*') ? 'active' : '' }}" href="{{ route('pedidos.index') }}">Pedidos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('clientes.*') ? 'active' : '' }}" href="{{ route('clientes.index') }}">Clientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('insumos.*') ? 'active' : '' }}" href="{{ route('insumos.index') }}">Insumos</a>
+                            </li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->

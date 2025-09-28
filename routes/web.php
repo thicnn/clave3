@@ -1,24 +1,35 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ClienteController; // <-- AÑADE ESTA LÍNEA
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\InsumoController;
-use App\Http\Controllers\PedidoController; // <-- AÑADE ESTA LÍNEA
+use App\Http\Controllers\PedidoController;
 
+// Ruta de bienvenida pública
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Rutas de autenticación generadas por Laravel (login, register, etc.)
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Grupo de rutas protegidas que requieren autenticación
+Route::middleware(['auth'])->group(function () {
+    // Dashboard
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::resource('clientes', ClienteController::class); // <-- Y AÑADE ESTA OTRA LÍNEA AL FINAL
+    // Rutas para el CRUD de Clientes
+    Route::resource('clientes', ClienteController::class);
 
-Route::resource('insumos', InsumoController::class);
+    // Rutas para el CRUD de Insumos
+    Route::resource('insumos', InsumoController::class);
 
-Route::resource('pedidos', PedidoController::class); // <-- Y AÑADE ESTA OTRA
+    // Rutas para el CRUD de Pedidos
+    Route::resource('pedidos', PedidoController::class);
 
-// Ruta para eliminar un archivo adjunto de un pedido
-Route::delete('/pedidos/{pedido}/archivos/{archivo}', [PedidoController::class, 'destroyArchivo'])
-    ->name('pedidos.archivos.destroy');
+    // Ruta específica para eliminar archivos adjuntos de un pedido
+    Route::delete('/pedidos/{pedido}/archivos/{archivo}', [PedidoController::class, 'destroyArchivo'])
+        ->name('pedidos.archivos.destroy');
+});

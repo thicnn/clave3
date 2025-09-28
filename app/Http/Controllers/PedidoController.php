@@ -12,11 +12,29 @@ use Illuminate\Support\Facades\Storage;
 class PedidoController extends Controller
 {
     /**
-     * Muestra una lista de todos los pedidos.
+     * Muestra una lista de todos los pedidos, con filtros opcionales.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pedidos = Pedido::with('cliente')->latest()->get();
+        // Empezamos la consulta base
+        $query = Pedido::with('cliente')->latest();
+
+        // Filtro por nombre de cliente
+        if ($request->filled('search_cliente')) {
+            $query->whereHas('cliente', function ($q) use ($request) {
+                $q->where('nombre', 'like', '%' . $request->search_cliente . '%');
+            });
+        }
+
+        // Filtro por estado
+        if ($request->filled('filter_estado')) {
+            $query->where('estado', $request->filter_estado);
+        }
+
+        // Ejecutamos la consulta y obtenemos los resultados
+        $pedidos = $query->get();
+
+        // Devolvemos la vista con los pedidos filtrados
         return view('pedidos.index', ['pedidos' => $pedidos]);
     }
 
