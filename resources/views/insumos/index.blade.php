@@ -31,7 +31,8 @@
         </thead>
         <tbody>
             @forelse ($insumos as $insumo)
-                <tr>
+                {{-- Si el stock actual es menor o igual al mínimo, la fila se pinta de rojo claro --}}
+                <tr style="{{ $insumo->stock_actual <= $insumo->stock_minimo ? 'background-color: #ffcccc;' : '' }}">
                     <td>{{ $insumo->id }}</td>
                     <td>{{ $insumo->nombre }}</td>
                     <td>$ {{ number_format($insumo->costo, 2) }}</td>

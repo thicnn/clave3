@@ -84,13 +84,19 @@
 <hr>
 <h3>Archivos Adjuntos</h3>
 @if ($pedido->archivos->count() > 0)
-    <ul>
+    <ul style="list-style: none; padding: 0;">
         @foreach ($pedido->archivos as $archivo)
-            <li>
-                <a href="{{ asset('storage/' . $archivo->ruta) }}" target="_blank">
+            <li style="margin-bottom: 5px;">
+                <a href="{{ asset('storage/' . $archivo->ruta) }}" target="_blank" style="margin-right: 15px;">
                     {{ $archivo->nombre_original }}
                 </a>
-                {{-- En el futuro aquí pondremos un botón para eliminar archivos individuales --}}
+
+                {{-- Formulario para eliminar el archivo --}}
+                <form action="{{ route('pedidos.archivos.destroy', ['pedido' => $pedido->id, 'archivo' => $archivo->id]) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este archivo?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" style="background: none; border: none; color: red; cursor: pointer; text-decoration: underline;">Eliminar</button>
+                </form>
             </li>
         @endforeach
     </ul>

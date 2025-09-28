@@ -18,3 +18,7 @@ Route::resource('clientes', ClienteController::class); // <-- Y AÑADE ESTA OTRA
 Route::resource('insumos', InsumoController::class);
 
 Route::resource('pedidos', PedidoController::class); // <-- Y AÑADE ESTA OTRA
+
+// Ruta para eliminar un archivo adjunto de un pedido
+Route::delete('/pedidos/{pedido}/archivos/{archivo}', [PedidoController::class, 'destroyArchivo'])
+    ->name('pedidos.archivos.destroy');

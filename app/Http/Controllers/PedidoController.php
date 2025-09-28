@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Pedido;
 use App\Models\Cliente;
 use App\Models\Insumo;
+use App\Models\ArchivoPedido;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PedidoController extends Controller
 {
@@ -200,5 +202,25 @@ class PedidoController extends Controller
     {
         $pedido->delete();
         return redirect()->route('pedidos.index')->with('success', '¡Pedido eliminado correctamente!');
+    }
+
+    /**
+     * Elimina un archivo adjunto de un pedido.
+     */
+    public function destroyArchivo(Pedido $pedido, ArchivoPedido $archivo)
+    {
+        // 1. Verificar que el archivo pertenece al pedido (por seguridad)
+        if ($archivo->pedido_id !== $pedido->id) {
+            return back()->with('error', 'Acción no autorizada.');
+        }
+
+        // 2. Eliminar el archivo físico del disco
+        Storage::disk('public')->delete($archivo->ruta);
+
+        // 3. Eliminar el registro de la base de datos
+        $archivo->delete();
+
+        // 4. Redireccionar de vuelta a la página de edición con un mensaje
+        return back()->with('success', '¡Archivo eliminado correctamente!');
     }
 }
