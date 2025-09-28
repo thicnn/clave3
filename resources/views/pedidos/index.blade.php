@@ -26,7 +26,7 @@
         <tbody>
             @forelse ($pedidos as $pedido)
                 <tr>
-                    <td>{{ $pedido->id }}</td>
+                    <td><a href="{{ route('pedidos.show', $pedido->id) }}">{{ $pedido->id }}</a></td>
                     <td>{{ $pedido->cliente->nombre }}</td>
                     <td>{{ $pedido->fecha_entrega ? \Carbon\Carbon::parse($pedido->fecha_entrega)->format('d/m/Y') : 'N/A' }}</td>
                     <td>{{ $pedido->estado }}</td>
